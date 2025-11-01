@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { registerUser, emailVerification, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails , deleteUserAccount ,updateProfileImage} from "../controllers/user.controller.js"
+import { registerUser, emailVerification, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, deleteUserAccount, updateProfileImage } from "../controllers/user.controller.js"
 import { upload } from "../middleware/multer.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 const router = Router()
 
-
+router.route("/").post((req, res) => {
+    res.json({ message: "POST request received at /" });
+});
 router.route("/register").post(
     upload.fields([
         {
