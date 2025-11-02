@@ -2,8 +2,6 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
-import { errorMiddleware } from "./middleware/error.js";
-import userRouter from "./routers/user.routes.js";
 
 const app = express();
 
@@ -11,27 +9,30 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://shop-sence.vercel.app",
-      "http://localhost:5173",
+      "https://shop-sence.vercel.app", // deployed frontend
+      "http://localhost:5173", // local frontend
     ],
-    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // allow all necessary methods
+    credentials: true, // allow cookies / auth headers
   })
 );
 
+// ✅ Handle preflight OPTIONS requests globally
+app.options("*", cors());
+
+// ✅ Body parsers and static files
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cookieParser());
 app.use(express.static(path.resolve("public")));
 
+// ✅ Import user routes
+import userRouter from "./routers/user.routes.js";
+app.use("/api/v1/users", userRouter);
+
 // ✅ Root route test
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Backend is live 🚀" });
 });
-
-// ✅ User routes
-app.use("/api/v1/users", userRouter);
-
-// ✅ Error middleware
-app.use(errorMiddleware);
 
 export default app;
