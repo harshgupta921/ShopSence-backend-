@@ -9,7 +9,7 @@ const GenerateAndSendVerificationEmail = async (user) => {
       expiresIn: process.env.EMAIL_VERIFICATION_EXPIRY,
     });
 
-    const verificationLink = `${process.env.DOMAIN}/api/v1/users/verify-email/${_id}/${verificationToken}`;
+    const verificationLink = `https://shop-sence-backend.vercel.app/api/v1/users/verify-email/${_id}/${verificationToken}`;
 
     // Create a transporter using Gmail's service
     const transporter = createTransport({
