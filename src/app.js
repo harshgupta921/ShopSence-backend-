@@ -1,30 +1,37 @@
-import express from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import path from 'path';
-import http from 'http';
-import { errorMiddleware } from './middleware/error.js';
-// Create Express app
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import path from "path";
+import { errorMiddleware } from "./middleware/error.js";
+import userRouter from "./routers/user.routes.js";
+
 const app = express();
 
-// CORS configuration
-app.use(cors({
-    origin: process.env.CORS_ORIGIN, 
+// ✅ Proper CORS setup
+app.use(
+  cors({
+    origin: [
+      "https://shop-sence.vercel.app",
+      "http://localhost:5173",
+    ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-}));
+  })
+);
 
-// Middleware setup
-app.use(express.json({ limit: '16kb' }));
-app.use(express.urlencoded({ extended: true, limit: '16kb' }));
-app.use(express.static(path.resolve('public')));
+app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cookieParser());
+app.use(express.static(path.resolve("public")));
 
-const httpServer = http.createServer(app);
+// ✅ Root route test
+app.get("/", (req, res) => {
+  res.json({ success: true, message: "Backend is live 🚀" });
+});
 
-// Router import and setup
-import userRouter from './routers/user.routes.js';
-app.use('/api/v1/users', userRouter);
+// ✅ User routes
+app.use("/api/v1/users", userRouter);
 
+// ✅ Error middleware
 app.use(errorMiddleware);
-export { httpServer };
+
+export default app;
