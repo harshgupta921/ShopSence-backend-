@@ -16,7 +16,7 @@ const GenerateAndSendVerificationEmail = async (user) => {
     const verificationLink = `https://shop-sence-backend.vercel.app/api/v1/users/verify-email/${_id}/${verificationToken}`;
 
     await resend.emails.send({
-      from: "ShopSence <noreply@shopsence.com>",
+     from: "ShopSence <onboarding@resend.dev>",
       to: email,
       subject: "Email Verification",
       html: `
