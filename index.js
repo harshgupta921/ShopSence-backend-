@@ -4,7 +4,6 @@ import app from "./src/app.js";
 
 dotenv.config({ path: "./.env" });
 
-// Connect DB
-connectDB()
-  
+connectDB().catch((err) => console.error("DB connection error:", err));
+
 export default app;
